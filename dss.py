@@ -23,9 +23,14 @@ PORT = 4080
 
 def getMetadata():
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")[:-3]
-    message = CLIENT_ID + ':' + timestamp
 
-    signature = hmac.new(CLIENT_SECRET, message, hashlib.sha256).hexdigest()
+    #python 2.x
+    #message = CLIENT_ID + ':' + timestamp
+    #signature = hmac.new(CLIENT_SECRET, message, hashlib.sha256).hexdigest()
+
+    # python 3.x
+    message = CLIENT_ID + ':' + timestamp
+    signature = hmac.new(bytes(CLIENT_SECRET, 'utf8'), bytes(message, 'utf8'), hashlib.sha256).hexdigest()
 
     metadata = [('x-auth-clientkey', CLIENT_KEY),
                 ('x-auth-timestamp', timestamp),

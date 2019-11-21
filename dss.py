@@ -13,9 +13,9 @@ import hmac
 import hashlib
 
 # Config for GiGA Genie gRPC
-CLIENT_KEY = 'Y2xpZW50X2tleTE1NzA2NzUzNjAwNDY='
-CLIENT_ID = 'Y2xpZW50X2lkMTU3MDY3NTM2MDA0Ng=='
-CLIENT_SECRET = 'Y2xpZW50X3NlY3JldDE1NzA2NzUzNjAwNDY='
+CLIENT_KEY = ''
+CLIENT_ID = ''
+CLIENT_SECRET = ''
 HOST = 'connector.gigagenie.ai'
 PORT = 4080
 
@@ -25,12 +25,12 @@ def getMetadata():
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")[:-3]
 
     #python 2.x
-    #message = CLIENT_ID + ':' + timestamp
-    #signature = hmac.new(CLIENT_SECRET, message, hashlib.sha256).hexdigest()
+    message = CLIENT_ID + ':' + timestamp
+    signature = hmac.new(CLIENT_SECRET, message, hashlib.sha256).hexdigest()
 
     # python 3.x
-    message = CLIENT_ID + ':' + timestamp
-    signature = hmac.new(bytes(CLIENT_SECRET, 'utf8'), bytes(message, 'utf8'), hashlib.sha256).hexdigest()
+    # message = CLIENT_ID + ':' + timestamp
+    # signature = hmac.new(bytes(CLIENT_SECRET, 'utf8'), bytes(message, 'utf8'), hashlib.sha256).hexdigest()
 
     metadata = [('x-auth-clientkey', CLIENT_KEY),
                 ('x-auth-timestamp', timestamp),
@@ -67,6 +67,7 @@ def queryByText(text):
     print(response)
     print('================================')
     print ("resultCd: %d" % (response.resultCd))
+
     if response.resultCd == 200:
         print ("uword: %s" % (response.uword))
         #dssAction = response.action
@@ -81,7 +82,7 @@ def queryByText(text):
 
 def main():
     # Dialog : queryByText
-    queryByText("안녕")
+    queryByText("지금몇시야")
 
 if __name__ == '__main__':
     main()
